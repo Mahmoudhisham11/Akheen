@@ -1,0 +1,283 @@
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.form {
+  display: grid;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.imagePicker {
+  width: 100%;
+  min-height: 180px;
+  border: 1.5px dashed #b8c1d3;
+  border-radius: 14px;
+  background: #f8faff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.imagePlaceholder {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  color: #475269;
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.placeholderIcon {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholderIcon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.previewImage {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+}
+
+.field span {
+  color: #243149;
+  font-size: 0.79rem;
+  font-weight: 600;
+}
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  border: 1px solid #d7ddea;
+  border-radius: 10px;
+  min-height: 42px;
+  padding: 0 12px;
+  background: #ffffff;
+  color: #152033;
+  font-size: 0.87rem;
+}
+
+.field textarea {
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.categoryRow {
+  display: block;
+}
+
+.sizesBlock {
+  border: 1px solid #dde4f0;
+  border-radius: 12px;
+  background: #f9fbff;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.sizesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sizesHeader span {
+  color: #20304a;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.modeHint {
+  margin: 0;
+  color: #5b6780;
+  font-size: 0.76rem;
+}
+
+.sizesList {
+  display: grid;
+  gap: 10px;
+}
+
+.sizeRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: end;
+}
+
+.removeSizeBtn {
+  min-height: 42px;
+  border: 1px solid #d7ddea;
+  border-radius: 10px;
+  padding: 0 12px;
+  background: #ffffff;
+  color: #273856;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.removeSizeBtn:hover,
+.removeSizeBtn:focus-visible {
+  background: #f4f7fc;
+}
+
+.totalQtyText {
+  margin: 0;
+  color: #2b3a56;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.manualQtyWrap {
+  border-top: 1px solid #dce4f1;
+  padding-top: 10px;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  min-height: 38px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  padding: 0 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.primaryBtn {
+  background: #0f1f35;
+  color: #ffffff;
+}
+
+.primaryBtn:hover,
+.primaryBtn:focus-visible {
+  background: #0b1727;
+}
+
+.secondaryBtn {
+  border-color: #cdd5e4;
+  background: #ffffff;
+  color: #1f2b42;
+}
+
+.secondaryBtn:hover,
+.secondaryBtn:focus-visible {
+  background: #f4f7fc;
+}
+
+.error,
+.success {
+  margin: 0;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 0.8rem;
+}
+
+.error {
+  border: 1px solid #f3c5c5;
+  background: #fff5f5;
+  color: #a32b2b;
+}
+
+.success {
+  border: 1px solid #bfe8cc;
+  background: #f2fff6;
+  color: #1d6e39;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 16, 27, 0.44);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  z-index: 1600;
+}
+
+.modal {
+  width: min(460px, 100%);
+  border-radius: 14px;
+  border: 1px solid #dbe2f0;
+  background: #ffffff;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.modal h2 {
+  margin: 0;
+  color: #16233a;
+  font-size: 1.04rem;
+}
+
+.modalForm {
+  display: grid;
+  gap: 10px;
+}
+
+.modalForm input {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid #d7ddea;
+  border-radius: 9px;
+  padding: 0 11px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 900px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .fieldGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .categoryRow {
+    display: block;
+  }
+
+  .sizeRow {
+    grid-template-columns: 1fr;
+  }
+}
+

@@ -1,0 +1,72 @@
+.section {
+  width: 100%;
+  padding: 0;
+  background: #ffffff;
+}
+
+.imageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1536 / 770;
+  overflow: hidden;
+}
+
+.bannerImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+.overlay {
+  position: absolute;
+  left: clamp(0.9rem, 2.6vw, 2.6rem);
+  right: clamp(0.9rem, 2.6vw, 2.6rem);
+  bottom: clamp(0.9rem, 2.6vw, 2.3rem);
+  max-width: 660px;
+  color: #f2f4f7;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+}
+
+.kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: #d7dce3;
+}
+
+.overlay h2 {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  line-height: 0.96;
+  letter-spacing: -0.01em;
+}
+
+.text {
+  margin: 0.62rem 0 0;
+  max-width: 48ch;
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  line-height: 1.45;
+  color: #d9dee6;
+}
+
+@media (max-width: 640px) {
+  .overlay {
+    left: 12px;
+    right: 12px;
+    bottom: 14px;
+  }
+
+  .kicker {
+    font-size: 0.62rem;
+    letter-spacing: 0.11em;
+  }
+
+  .overlay h2 {
+    font-size: clamp(1.2rem, 6vw, 1.85rem);
+  }
+
+  .text {
+    font-size: 0.72rem;
+    line-height: 1.32;
+    max-width: 34ch;
+  }
+}

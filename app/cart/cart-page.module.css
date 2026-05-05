@@ -1,0 +1,284 @@
+.page {
+  width: 100%;
+  background: #ffffff;
+}
+
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px 16px 46px;
+}
+
+.breadcrumb {
+  margin: 0;
+  color: #8892a1;
+  font-size: 0.86rem;
+}
+
+.title {
+  margin: 12px 0 0;
+  color: #111111;
+  font-size: 2rem;
+  letter-spacing: 0.01em;
+}
+
+.layout {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 22px;
+}
+
+.tableHeader {
+  padding: 0 10px 10px;
+  border-bottom: 1px solid #e7ebf2;
+  display: grid;
+  grid-template-columns: 1.6fr 0.7fr 0.7fr 0.7fr;
+  color: #2a3342;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.rows {
+  display: grid;
+}
+
+.row {
+  border-bottom: 1px solid #eef2f7;
+  padding: 14px 10px;
+  display: grid;
+  grid-template-columns: 1.6fr 0.7fr 0.7fr 0.7fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.productCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.imageWrap {
+  width: 84px;
+  height: 84px;
+  background: #f5f7fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.itemImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.imageFallback {
+  color: #7f8897;
+  font-size: 0.72rem;
+}
+
+.productMeta h3 {
+  margin: 0;
+  color: #181818;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.productMeta p {
+  margin: 5px 0 0;
+  color: #6f7786;
+  font-size: 0.86rem;
+}
+
+.priceCell {
+  display: grid;
+  gap: 4px;
+}
+
+.oldPrice {
+  color: #8c97a6;
+  text-decoration: line-through;
+  font-size: 0.84rem;
+}
+
+.priceCell strong,
+.totalCell strong {
+  color: #131313;
+  font-size: 1.26rem;
+}
+
+.qtyCell {
+  display: flex;
+}
+
+.qtyControl {
+  display: inline-flex;
+  border: 1px solid #dbe1ea;
+}
+
+.qtyControl button,
+.qtyControl span {
+  width: 34px;
+  height: 32px;
+  border: 0;
+  background: #ffffff;
+  color: #202b3e;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qtyControl button {
+  cursor: pointer;
+}
+
+.totalCell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.removeBtn {
+  border: 0;
+  background: transparent;
+  font-size: 1.5rem;
+  color: #1f2937;
+}
+
+.commentsBlock {
+  margin-top: 16px;
+}
+
+.commentsBlock label {
+  display: block;
+  font-size: 0.94rem;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.commentsBlock textarea {
+  width: 100%;
+  border: 1px solid #dbe1ea;
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.summaryCol {
+  border-top: 2px solid #111111;
+  padding-top: 12px;
+  align-self: start;
+}
+
+.summaryCol h2 {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #2d3748;
+  letter-spacing: 0.02em;
+}
+
+.summaryLine {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #2d3748;
+}
+
+.summaryLine strong {
+  font-size: 1.2rem;
+  color: #111111;
+}
+
+.couponBlock {
+  margin-top: 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.couponBlock label {
+  color: #2d3748;
+  font-size: 0.9rem;
+}
+
+.couponBlock input {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #dde3ec;
+  padding: 0 10px;
+}
+
+.taxText {
+  margin: 10px 0 0;
+  color: #7a8391;
+  font-size: 0.88rem;
+}
+
+.checkoutBtn,
+.continueBtn {
+  margin-top: 10px;
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #101010;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.checkoutBtn {
+  color: #ffffff;
+  background: #000000;
+}
+
+.continueBtn {
+  background: #ffffff;
+  color: #111111;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.emptyState {
+  margin-top: 22px;
+  border: 1px solid #e5ebf4;
+  background: #f8fbff;
+  padding: 20px;
+}
+
+.emptyState p {
+  margin: 0;
+  color: #4b5563;
+}
+
+.emptyState a {
+  margin-top: 10px;
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  background: #111111;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+@media (max-width: 980px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tableHeader {
+    display: none;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 14px 0;
+  }
+}
