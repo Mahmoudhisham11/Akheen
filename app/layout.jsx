@@ -3,7 +3,6 @@ import './globals.css';
 
 export const metadata = {
   applicationName: 'Akheen',
-  manifest: '/site.webmanifest',
   appleWebApp: {
     capable: true,
     title: 'Akheen',
