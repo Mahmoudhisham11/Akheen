@@ -6,6 +6,7 @@ import 'swiper/css';
 import Link from 'next/link';
 import styles from './AccessoriesSection.module.css';
 import { getOffers, getProducts } from '@/lib/firebase/firestore';
+import { getNormalizedSizeOptions } from '@/lib/utils/productSizes';
 import { useCart } from '@/context/CartContext';
 
 function formatPrice(value) {
@@ -27,11 +28,7 @@ function getDiscountPercent(currentPrice, offerPrice) {
 function ProductCard({ product, delayMs }) {
   const { addItem } = useCart();
   const discountPercent = product.hasOffer ? getDiscountPercent(product.currentPrice, product.offerPrice) : null;
-  const parsedSizes = Array.isArray(product?.sizes)
-    ? product.sizes
-      .map((item) => ({ size: String(item?.size || '').trim(), quantity: Number(item?.quantity ?? 0) }))
-      .filter((item) => item.size && Number.isFinite(item.quantity) && item.quantity >= 0)
-    : [];
+  const parsedSizes = getNormalizedSizeOptions(product);
   const fallbackQty = Number(product?.quantity ?? 0);
   const defaultSizeEntry = parsedSizes.find((item) => item.quantity > 0) || parsedSizes[0];
   const size = defaultSizeEntry?.size || 'One Size';

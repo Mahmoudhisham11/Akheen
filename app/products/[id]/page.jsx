@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 import Header from '@/components/shared/Header';
 import FooterSection from '@/components/shared/FooterSection';
 import { getOffers, getProduct, getProducts } from '@/lib/firebase/firestore';
+import { getNormalizedSizeOptions } from '@/lib/utils/productSizes';
 import styles from './product-details.module.css';
 import { useCart } from '@/context/CartContext';
 
@@ -101,22 +102,7 @@ export default function ProductDetailsPage() {
     return getDiscountPercent(product.currentPrice, product.offerPrice);
   }, [product]);
 
-  const sizeOptions = useMemo(() => {
-    const parsedSizes = Array.isArray(product?.sizes)
-      ? product.sizes
-      .map((item) => ({ size: String(item?.size || '').trim(), quantity: Number(item?.quantity ?? 0) }))
-      .filter((item) => item.size && Number.isFinite(item.quantity) && item.quantity >= 0)
-      : [];
-
-    if (parsedSizes.length) return parsedSizes;
-
-    const manualQty = Number(product?.quantity ?? 0);
-    if (Number.isFinite(manualQty) && manualQty >= 0) {
-      return [{ size: 'One Size', quantity: manualQty }];
-    }
-
-    return [];
-  }, [product]);
+  const sizeOptions = useMemo(() => getNormalizedSizeOptions(product), [product]);
 
   const selectedSizeEntry = useMemo(
     () => sizeOptions.find((item) => item.size === selectedSize) || null,
