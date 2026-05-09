@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react';
 import shellStyles from '../../dashboard.module.css';
 import styles from './add-product.module.css';
 import { addCategory, addProduct, getCategories } from '@/lib/firebase/firestore';
-import { expandCompoundSizeRows } from '@/lib/utils/productSizes';
 import { uploadImageToCloudinary } from '@/lib/cloudinary/uploadImage';
 
 function AddPhotoIcon() {
@@ -67,7 +66,7 @@ export default function DashboardAddProductPage() {
       ),
     [normalizedSizeRows]
   );
-  const effectiveSizesRaw = useMemo(
+  const effectiveSizes = useMemo(
     () =>
       normalizedSizeRows.filter(
         (item) =>
@@ -79,14 +78,7 @@ export default function DashboardAddProductPage() {
       ),
     [normalizedSizeRows]
   );
-  const effectiveSizes = useMemo(
-    () =>
-      expandCompoundSizeRows(
-        effectiveSizesRaw.map((item) => ({ size: item.size, quantity: item.quantity }))
-      ),
-    [effectiveSizesRaw]
-  );
-  const inventoryMode = effectiveSizesRaw.length > 0 ? 'sizes' : 'manual';
+  const inventoryMode = effectiveSizes.length > 0 ? 'sizes' : 'manual';
   const totalQuantity = useMemo(
     () =>
       inventoryMode === 'sizes'

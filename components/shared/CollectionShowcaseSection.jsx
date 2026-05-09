@@ -6,7 +6,6 @@ import Link from 'next/link';
 import styles from './CollectionShowcaseSection.module.css';
 import featuredModel from '@/public/images/ChatGPT Image Apr 29, 2026, 02_11_14 PM.png';
 import { getOffers, getProducts } from '@/lib/firebase/firestore';
-import { getNormalizedSizeOptions } from '@/lib/utils/productSizes';
 import { useCart } from '@/context/CartContext';
 
 function formatPrice(value) {
@@ -149,7 +148,11 @@ export default function CollectionShowcaseSection() {
               const discountPercent = product.hasOffer
                 ? getDiscountPercent(product.currentPrice, product.offerPrice)
                 : null;
-              const parsedSizes = getNormalizedSizeOptions(product);
+              const parsedSizes = Array.isArray(product?.sizes)
+                ? product.sizes
+                  .map((item) => ({ size: String(item?.size || '').trim(), quantity: Number(item?.quantity ?? 0) }))
+                  .filter((item) => item.size && Number.isFinite(item.quantity) && item.quantity >= 0)
+                : [];
               const fallbackQty = Number(product?.quantity ?? 0);
               const defaultSizeEntry = parsedSizes.find((item) => item.quantity > 0) || parsedSizes[0];
               const size = defaultSizeEntry?.size || 'One Size';

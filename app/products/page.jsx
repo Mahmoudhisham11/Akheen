@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Header from '@/components/shared/Header';
 import { getOffers, getProducts } from '@/lib/firebase/firestore';
-import { getNormalizedSizeOptions } from '@/lib/utils/productSizes';
 import styles from './products-page.module.css';
 import FooterSection from '@/components/shared/FooterSection';
 import { useCart } from '@/context/CartContext';
@@ -313,7 +312,11 @@ export default function UserProductsPage() {
                   const discountPercent = product.hasOffer
                     ? getDiscountPercent(product.currentPrice, product.offerPrice)
                     : null;
-                  const parsedSizes = getNormalizedSizeOptions(product);
+                  const parsedSizes = Array.isArray(product?.sizes)
+                    ? product.sizes
+                      .map((item) => ({ size: String(item?.size || '').trim(), quantity: Number(item?.quantity ?? 0) }))
+                      .filter((item) => item.size && Number.isFinite(item.quantity) && item.quantity >= 0)
+                    : [];
                   const fallbackQty = Number(product?.quantity ?? 0);
                   const defaultSizeEntry = parsedSizes.find((item) => item.quantity > 0) || parsedSizes[0];
                   const size = defaultSizeEntry?.size || 'One Size';

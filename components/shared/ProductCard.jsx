@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import styles from './ProductCard.module.css';
 import { useCart } from '@/context/CartContext';
-import { getNormalizedSizeOptions } from '@/lib/utils/productSizes';
 
 function formatPrice(value) {
   const number = Number(value);
@@ -25,7 +24,11 @@ export default function ProductCard({ product }) {
   const { addItem } = useCart();
   const hasOffer = Boolean(product?.hasOffer);
   const discountPercent = hasOffer ? getDiscountPercent(product.currentPrice, product.offerPrice) : null;
-  const parsedSizes = getNormalizedSizeOptions(product);
+  const parsedSizes = Array.isArray(product?.sizes)
+    ? product.sizes
+      .map((item) => ({ size: String(item?.size || '').trim(), quantity: Number(item?.quantity ?? 0) }))
+      .filter((item) => item.size && Number.isFinite(item.quantity) && item.quantity >= 0)
+    : [];
   const fallbackQty = Number(product?.quantity ?? 0);
   const defaultSizeEntry = parsedSizes.find((item) => item.quantity > 0) || parsedSizes[0];
   const size = defaultSizeEntry?.size || 'One Size';
