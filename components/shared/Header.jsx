@@ -12,7 +12,7 @@ import { useCart } from '@/context/CartContext';
 const navLinks = [
   { label: 'Home', href: '#hero-section' },
   { label: 'Categories', href: '#categories-section' },
-  { label: 'Highlights', href: '#brand-highlights-section' },
+  { label: 'Highlights', href: '#offers-section' },
   { label: 'New Arrival', href: '#offers-section' },
   { label: 'Products', href: '#products-section' },
 ];

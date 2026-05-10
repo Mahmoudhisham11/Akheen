@@ -129,6 +129,24 @@ export default function ProductDetailsPage() {
       ? Number(product?.quantity)
       : 0;
 
+  const galleryUrls = useMemo(() => {
+    if (!product) return [];
+    return [product.imageUrl, product.imageUrl2].filter(Boolean);
+  }, [product]);
+
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  useEffect(() => {
+    setActiveImageIndex(0);
+  }, [productId]);
+
+  useEffect(() => {
+    if (!galleryUrls.length) return;
+    setActiveImageIndex((prev) => Math.min(prev, galleryUrls.length - 1));
+  }, [galleryUrls]);
+
+  const displayMainImageUrl = galleryUrls[activeImageIndex] || product?.imageUrl;
+
   useEffect(() => {
     if (!sizeOptions.length) {
       setSelectedSize('');
@@ -168,22 +186,33 @@ export default function ProductDetailsPage() {
             <section className={styles.productSection}>
               <div className={styles.galleryColumn}>
                 <div className={styles.mainImageWrap}>
-                  {product.imageUrl ? (
+                  {displayMainImageUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={product.imageUrl} alt={product.name || 'Product image'} className={styles.mainImage} />
+                    <img src={displayMainImageUrl} alt={product.name || 'Product image'} className={styles.mainImage} />
                   ) : (
                     <div className={styles.fallbackImage}>No Image</div>
                   )}
                 </div>
                 <div className={styles.thumbRow}>
-                  <div className={styles.thumbItem}>
-                    {product.imageUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={product.imageUrl} alt={product.name || 'Product thumbnail'} className={styles.thumbImage} />
-                    ) : (
+                  {galleryUrls.length ? (
+                    galleryUrls.map((url, idx) => (
+                      <button
+                        key={`${url}-${idx}`}
+                        type="button"
+                        className={`${styles.thumbItem} ${styles.thumbBtn} ${idx === activeImageIndex ? styles.thumbItemActive : ''}`}
+                        onClick={() => setActiveImageIndex(idx)}
+                        aria-label={`Product image ${idx + 1}`}
+                        aria-pressed={idx === activeImageIndex}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={url} alt="" className={styles.thumbImage} />
+                      </button>
+                    ))
+                  ) : (
+                    <div className={styles.thumbItem}>
                       <div className={styles.fallbackThumb}>No Image</div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
 

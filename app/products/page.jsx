@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Header from '@/components/shared/Header';
 import { getOffers, getProducts } from '@/lib/firebase/firestore';
 import styles from './products-page.module.css';
@@ -33,7 +34,10 @@ function clampNumber(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
-export default function UserProductsPage() {
+function UserProductsPageInner() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const { addItem } = useCart();
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -91,6 +95,30 @@ export default function UserProductsPage() {
   const categories = useMemo(() => {
     return Array.from(new Set(products.map((product) => product.category).filter(Boolean)));
   }, [products]);
+
+  useEffect(() => {
+    if (!categories.length) return;
+    const fromUrl = searchParams.get('category')?.trim() || '';
+    if (!fromUrl) return;
+    if (categories.includes(fromUrl)) {
+      setSelectedCategory(fromUrl);
+      return;
+    }
+    setSelectedCategory('');
+    const next = new URLSearchParams(searchParams.toString());
+    next.delete('category');
+    const qs = next.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  }, [searchParams, categories, pathname, router]);
+
+  const setCategoryFilter = (value) => {
+    setSelectedCategory(value);
+    const next = new URLSearchParams(searchParams.toString());
+    if (value) next.set('category', value);
+    else next.delete('category');
+    const qs = next.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  };
 
   const priceBounds = useMemo(() => {
     const prices = products
@@ -172,7 +200,7 @@ export default function UserProductsPage() {
   };
 
   const clearFilters = () => {
-    setSelectedCategory('');
+    setCategoryFilter('');
     setDraftMinPrice(priceBounds.min);
     setDraftMaxPrice(priceBounds.max);
     setAppliedMinPrice(priceBounds.min);
@@ -221,7 +249,7 @@ export default function UserProductsPage() {
 
             <div className={styles.filterBlock}>
               <h2>Category</h2>
-              <select value={selectedCategory} onChange={(event) => setSelectedCategory(event.target.value)}>
+              <select value={selectedCategory} onChange={(event) => setCategoryFilter(event.target.value)}>
                 <option value="">All categories</option>
                 {categories.map((category) => (
                   <option key={category} value={category}>
@@ -379,6 +407,28 @@ export default function UserProductsPage() {
       </main>
       <FooterSection />
     </>
+  );
+}
+
+export default function UserProductsPage() {
+  return (
+    <Suspense
+      fallback={
+        <>
+          <Header />
+          <main className={styles.page}>
+            <section className={styles.hero}>
+              <h1>Products</h1>
+              <p>Discover every piece in our collection with easy search and smart filters.</p>
+            </section>
+            <p className={styles.status}>Loading products...</p>
+          </main>
+          <FooterSection />
+        </>
+      }
+    >
+      <UserProductsPageInner />
+    </Suspense>
   );
 }
 

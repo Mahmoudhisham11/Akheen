@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import { NextResponse } from 'next/server';
+import { resolveCloudinaryCloudName } from '@/lib/cloudinary/config';
 
 function buildCloudinarySignature(publicId, timestamp, apiSecret) {
   const toSign = `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
@@ -14,11 +15,11 @@ export async function POST(request) {
       return NextResponse.json({ error: 'PUBLIC_ID_REQUIRED' }, { status: 400 });
     }
 
-    const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+    const cloudName = resolveCloudinaryCloudName();
     const apiKey = process.env.CLOUDINARY_API_KEY;
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
-    if (!cloudName || !apiKey || !apiSecret) {
+    if (!apiKey || !apiSecret) {
       return NextResponse.json({ error: 'CLOUDINARY_ENV_MISSING' }, { status: 500 });
     }
 

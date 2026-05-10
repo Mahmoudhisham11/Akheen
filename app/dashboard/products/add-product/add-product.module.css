@@ -11,6 +11,45 @@
   margin-top: 4px;
 }
 
+.imagePickersRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.imageSlotLabel {
+  margin: 0 0 8px;
+  color: #243149;
+  font-size: 0.79rem;
+  font-weight: 600;
+}
+
+.imagePickerSecondary {
+  min-height: 160px;
+}
+
+.removeSecondImageBtn {
+  margin-top: 10px;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 9px;
+  border: 1px solid #ccd6e8;
+  background: #ffffff;
+  color: #8a2a2a;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.removeSecondImageBtn:hover:not(:disabled) {
+  background: #fff5f5;
+}
+
+.removeSecondImageBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .imagePicker {
   width: 100%;
   min-height: 180px;
@@ -266,6 +305,10 @@
   .pageHeader {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .imagePickersRow {
+    grid-template-columns: 1fr;
   }
 
   .fieldGrid {

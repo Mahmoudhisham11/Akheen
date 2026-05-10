@@ -17,6 +17,7 @@ const adminLinks = [
 const productSubLinks = [
   { label: 'Offers', href: '/dashboard/products/offers' },
   { label: 'Add Product', href: '/dashboard/products/add-product' },
+  { label: 'Categories', href: '/dashboard/products/categories' },
   { label: 'Products', href: '/dashboard/products' },
 ];
 
@@ -27,6 +28,7 @@ const mobileTitles = {
   '/dashboard/products': 'Products',
   '/dashboard/products/offers': 'Offers',
   '/dashboard/products/add-product': 'Add Product',
+  '/dashboard/products/categories': 'Categories',
 };
 
 function SidebarIcon({ type }) {
@@ -74,7 +76,10 @@ export default function DashboardLayout({ children }) {
   const [isProductsOpen, setIsProductsOpen] = useState(() => pathname.startsWith('/dashboard/products'));
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  const pageTitle = mobileTitles[pathname] || 'Dashboard';
+  const pageTitle =
+    pathname?.includes('/dashboard/products/') && pathname?.endsWith('/edit')
+      ? 'Edit Product'
+      : mobileTitles[pathname] || 'Dashboard';
   const closeMobileSidebar = () => setIsMobileSidebarOpen(false);
 
   useEffect(() => {

@@ -6,16 +6,17 @@ import Link from 'next/link';
 import styles from './CategoriesMosaicSection.module.css';
 import sneakersImage from '@/public/images/snakers.png';
 import bagImage from '@/public/images/bag.png';
-import accessoriesImage from '@/public/images/ax.png';
-import socksImage from '@/public/images/socks.png';
+import accessoriesImage from '@/public/images/accessories.png';
+import slippersImage from '@/public/images/slippers.png';
 
+/** Values must match `product.category` / dashboard category names in Firestore. */
 const cards = [
   {
     key: 'shoes',
     title: 'Shoes',
+    productCategory: 'Shoes',
     subtitle: 'Modern silhouettes engineered for comfort, movement, and premium daily wear.',
     cta: 'Shop Shoes',
-    href: '#products-section',
     image: sneakersImage,
     className: 'cardLarge',
     imageClassName: 'imageShoes',
@@ -24,9 +25,9 @@ const cards = [
   {
     key: 'bags',
     title: 'Bags',
+    productCategory: 'Bags',
     subtitle: 'Refined structure with practical space to carry your essentials with elegance.',
     cta: 'Shop Bags',
-    href: '#products-section',
     image: bagImage,
     className: 'cardTopRight',
     imageClassName: 'imageBags',
@@ -35,23 +36,23 @@ const cards = [
   {
     key: 'accessories',
     title: 'Accessories',
+    productCategory: 'Accessories',
     subtitle: 'Signature pieces that elevate your style with subtle, premium detail.',
     cta: 'Shop Accessories',
-    href: '#products-section',
     image: accessoriesImage,
     className: 'cardMiddleRight',
     imageClassName: 'imageAccessories',
     delay: '420ms',
   },
   {
-    key: 'socks',
-    title: 'Socks',
-    subtitle: 'Soft, durable textures built for long-day comfort and clean styling.',
-    cta: 'Shop Socks',
-    href: '#products-section',
-    image: socksImage,
+    key: 'slippers',
+    title: 'Slippers',
+    productCategory: 'Slippers',
+    subtitle: 'Easy slides with cushioned comfort for relaxed days and elevated loungewear.',
+    cta: 'Shop Slippers',
+    image: slippersImage,
     className: 'cardBottomWide',
-    imageClassName: 'imageSocks',
+    imageClassName: 'imageSlippers',
     delay: '560ms',
   },
 ];
@@ -107,7 +108,11 @@ export default function CategoriesMosaicSection() {
             <div className={styles.overlay}>
               <h3>{card.title}</h3>
               <p>{card.subtitle}</p>
-              <Link href={card.href} className={styles.cta}>
+              <Link
+                href={`/products?category=${encodeURIComponent(card.productCategory)}`}
+                className={styles.cta}
+                aria-label={`${card.cta} — ${card.productCategory}`}
+              >
                 {card.cta}
               </Link>
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import shellStyles from '../dashboard.module.css';
 import styles from './products.module.css';
 import { deleteProduct, getCategories, getProducts, saveOffer } from '@/lib/firebase/firestore';
@@ -69,19 +70,30 @@ export default function DashboardProductsPage() {
     try {
       setIsDeleting(true);
 
-      if (deleteTarget.imagePublicId) {
-        const response = await fetch('/api/cloudinary/delete', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ publicId: deleteTarget.imagePublicId }),
-        });
-        const payload = await response.json();
-        if (!response.ok) {
-          throw new Error(payload?.error || 'Failed to delete image from Cloudinary.');
+      const cloudinaryIds = Array.from(
+        new Set([deleteTarget.imagePublicId, deleteTarget.imagePublicId2].filter(Boolean))
+      );
+      if (cloudinaryIds.length) {
+        let anyNotFound = false;
+        for (const publicId of cloudinaryIds) {
+          const response = await fetch('/api/cloudinary/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ publicId }),
+          });
+          const payload = await response.json();
+          if (!response.ok) {
+            if (payload?.error === 'CLOUDINARY_ENV_MISSING') {
+              throw new Error(
+                'Cloudinary is not configured on the server. Next.js does not load .env.example — put CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET in .env.local (copy from .env.example), restart the dev server, and set the same variables in hosting for production.'
+              );
+            }
+            throw new Error(payload?.error || 'Failed to delete image from Cloudinary.');
+          }
+          if (payload?.result === 'not found') anyNotFound = true;
         }
-
-        if (payload?.result === 'not found') {
-          setSuccessMessage('Image was already missing on Cloudinary. Product will be removed from Firestore.');
+        if (anyNotFound) {
+          setSuccessMessage('One or more images were already missing on Cloudinary. Product will be removed from Firestore.');
         }
       }
 
@@ -214,6 +226,9 @@ export default function DashboardProductsPage() {
                     <td>{product.quantity ?? '-'}</td>
                     <td>
                       <div className={styles.actionGroup}>
+                        <Link href={`/dashboard/products/${product.id}/edit`} className={styles.editBtn}>
+                          Edit
+                        </Link>
                         <button type="button" className={styles.offerBtn} onClick={() => openOfferPopup(product)}>
                           Offer
                         </button>
@@ -244,6 +259,9 @@ export default function DashboardProductsPage() {
                 <p>{formatPrice(product.price)}</p>
                 <p>Qty: {product.quantity ?? '-'}</p>
                 <div className={styles.actionGroup}>
+                  <Link href={`/dashboard/products/${product.id}/edit`} className={styles.editBtn}>
+                    Edit
+                  </Link>
                   <button type="button" className={styles.offerBtn} onClick={() => openOfferPopup(product)}>
                     Offer
                   </button>
