@@ -80,7 +80,7 @@ export default function DashboardProductsPage() {
           body: JSON.stringify({ publicId }),
         });
         const payload = await response.json().catch(() => ({}));
-        if (!response.ok) {
+        if (!response.ok || payload.ok === false) {
           if (payload?.error === 'CLOUDINARY_ENV_MISSING') {
             throw new Error(
               'Cloudinary is not configured on the server. Add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET to your hosting site (e.g. Netlify environment variables), redeploy, then try again.'
@@ -258,15 +258,70 @@ export default function DashboardProductsPage() {
                 <p>{product.category || '-'}</p>
                 <p>{formatPrice(product.price)}</p>
                 <p>Qty: {product.quantity ?? '-'}</p>
-                <div className={styles.actionGroup}>
-                  <Link href={`/dashboard/products/${product.id}/edit`} className={styles.editBtn}>
-                    Edit
+                <div className={`${styles.actionGroup} ${styles.cardActionRow}`}>
+                  <Link
+                    href={`/dashboard/products/${product.id}/edit`}
+                    className={`${styles.editBtn} ${styles.cardActionBtn}`}
+                    aria-label="Edit product"
+                    title="Edit"
+                  >
+                    <svg className={styles.cardActionIcon} viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                    <span className={styles.cardActionLabel}>Edit</span>
                   </Link>
-                  <button type="button" className={styles.offerBtn} onClick={() => openOfferPopup(product)}>
-                    Offer
+                  <button
+                    type="button"
+                    className={`${styles.offerBtn} ${styles.cardActionBtn}`}
+                    onClick={() => openOfferPopup(product)}
+                    aria-label="Create offer"
+                    title="Offer"
+                  >
+                    <svg className={styles.cardActionIcon} viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"
+                      />
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 6h.008v.008H6V6z"
+                      />
+                    </svg>
+                    <span className={styles.cardActionLabel}>Offer</span>
                   </button>
-                  <button type="button" className={styles.deleteBtn} onClick={() => setDeleteTarget(product)}>
-                    Delete
+                  <button
+                    type="button"
+                    className={`${styles.deleteBtn} ${styles.cardActionBtn}`}
+                    onClick={() => setDeleteTarget(product)}
+                    aria-label="Delete product"
+                    title="Delete"
+                  >
+                    <svg className={styles.cardActionIcon} viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                    <span className={styles.cardActionLabel}>Delete</span>
                   </button>
                 </div>
               </article>
