@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import shellStyles from '../dashboard.module.css';
 import styles from './products.module.css';
-import { deleteProduct, getCategories, getProducts, saveOffer } from '@/lib/firebase/firestore';
+import { deleteOffersForProduct, deleteProduct, getCategories, getProducts, saveOffer } from '@/lib/firebase/firestore';
 
 function formatPrice(value) {
   const number = Number(value);
@@ -73,34 +73,34 @@ export default function DashboardProductsPage() {
       const cloudinaryIds = Array.from(
         new Set([deleteTarget.imagePublicId, deleteTarget.imagePublicId2].filter(Boolean))
       );
-      if (cloudinaryIds.length) {
-        let anyNotFound = false;
-        for (const publicId of cloudinaryIds) {
-          const response = await fetch('/api/cloudinary/delete', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ publicId }),
-          });
-          const payload = await response.json();
-          if (!response.ok) {
-            if (payload?.error === 'CLOUDINARY_ENV_MISSING') {
-              throw new Error(
-                'Cloudinary is not configured on the server. Next.js does not load .env.example — put CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET in .env.local (copy from .env.example), restart the dev server, and set the same variables in hosting for production.'
-              );
-            }
-            throw new Error(payload?.error || 'Failed to delete image from Cloudinary.');
+      for (const publicId of cloudinaryIds) {
+        const response = await fetch('/api/cloudinary/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ publicId }),
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          if (payload?.error === 'CLOUDINARY_ENV_MISSING') {
+            throw new Error(
+              'Cloudinary is not configured on the server. Add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET to your hosting site (e.g. Netlify environment variables), redeploy, then try again.'
+            );
           }
-          if (payload?.result === 'not found') anyNotFound = true;
+          throw new Error(
+            typeof payload?.error === 'string' ? payload.error : 'Failed to delete image from Cloudinary.'
+          );
         }
-        if (anyNotFound) {
-          setSuccessMessage('One or more images were already missing on Cloudinary. Product will be removed from Firestore.');
+        const result = payload?.result;
+        if (result !== 'ok' && result !== 'not found') {
+          throw new Error('Unexpected response when deleting image from Cloudinary.');
         }
       }
 
+      await deleteOffersForProduct(deleteTarget.id);
       await deleteProduct(deleteTarget.id);
       setProducts((prev) => prev.filter((item) => item.id !== deleteTarget.id));
       setDeleteTarget(null);
-      setSuccessMessage((prev) => (prev ? `${prev} Product deleted successfully.` : 'Product deleted successfully.'));
+      setSuccessMessage('Product and related data deleted successfully.');
     } catch (error) {
       setErrorMessage(error?.message || 'Failed to delete product.');
     } finally {
