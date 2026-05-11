@@ -73,6 +73,8 @@ export default function DashboardProductsPage() {
       const cloudinaryIds = Array.from(
         new Set([deleteTarget.imagePublicId, deleteTarget.imagePublicId2].filter(Boolean))
       );
+      /** @type {'env' | 'api' | null} */
+      let cloudinaryWarning = null;
       for (const publicId of cloudinaryIds) {
         const response = await fetch('/api/cloudinary/delete', {
           method: 'POST',
@@ -82,17 +84,15 @@ export default function DashboardProductsPage() {
         const payload = await response.json().catch(() => ({}));
         if (!response.ok || payload.ok === false) {
           if (payload?.error === 'CLOUDINARY_ENV_MISSING') {
-            throw new Error(
-              'Cloudinary is not configured on the server. Add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET to your hosting site (e.g. Netlify environment variables), redeploy, then try again.'
-            );
+            cloudinaryWarning = 'env';
+            break;
           }
-          throw new Error(
-            typeof payload?.error === 'string' ? payload.error : 'Failed to delete image from Cloudinary.'
-          );
+          cloudinaryWarning = 'api';
+          continue;
         }
         const result = payload?.result;
         if (result !== 'ok' && result !== 'not found') {
-          throw new Error('Unexpected response when deleting image from Cloudinary.');
+          cloudinaryWarning = 'api';
         }
       }
 
@@ -100,7 +100,16 @@ export default function DashboardProductsPage() {
       await deleteProduct(deleteTarget.id);
       setProducts((prev) => prev.filter((item) => item.id !== deleteTarget.id));
       setDeleteTarget(null);
-      setSuccessMessage('Product and related data deleted successfully.');
+
+      let successMsg = 'Product and related data deleted successfully.';
+      if (cloudinaryWarning === 'env') {
+        successMsg =
+          'Product removed from the database. Cloudinary is not configured on the server—add CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET (and optionally CLOUDINARY_CLOUD_NAME) in Netlify → Environment variables, redeploy, then future deletes can remove images automatically. Or delete images manually in Cloudinary.';
+      } else if (cloudinaryWarning === 'api') {
+        successMsg =
+          'Product removed from the database. Some images could not be deleted from Cloudinary automatically; remove them in the Cloudinary dashboard if needed.';
+      }
+      setSuccessMessage(successMsg);
     } catch (error) {
       setErrorMessage(error?.message || 'Failed to delete product.');
     } finally {

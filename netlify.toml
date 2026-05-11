@@ -1,0 +1,7 @@
+# Production secrets belong in Netlify only (Site → Environment variables), never committed here.
+# Required for dashboard image delete API: CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET.
+# Optional: CLOUDINARY_CLOUD_NAME (see lib/cloudinary/config.js).
+# Match keys from .env.example / .env.local, then trigger a new deploy.
+
+[build]
+  command = "npm run build"
